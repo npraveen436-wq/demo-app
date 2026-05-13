@@ -1,4 +1,4 @@
-﻿package com.demo;
+package com.demo;
 
 public class App {
     public String greet(String name) {
