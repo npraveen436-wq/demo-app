@@ -5,7 +5,6 @@ pipeline {
         AWS_REGION    = 'us-east-1'
         S3_BUCKET     = 'cicd-artifacts-3ecbf78f'
         BUILD_VERSION = "1.0.${BUILD_NUMBER}"
-        MVN           = '/usr/share/maven/bin/mvn'
     }
 
     options {
@@ -20,7 +19,7 @@ pipeline {
 
         stage('Build & Unit Tests') {
             steps {
-                sh "${MVN} -B clean verify"
+                sh 'mvn -B clean verify'
             }
             post {
                 always { junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml' }
@@ -30,7 +29,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    sh "${MVN} -B sonar:sonar -Dsonar.projectKey=demo-app -Dsonar.projectName=demo-app"
+                    sh 'mvn -B sonar:sonar -Dsonar.projectKey=demo-app -Dsonar.projectName=demo-app'
                 }
             }
         }
@@ -45,7 +44,7 @@ pipeline {
 
         stage('Package') {
             steps {
-                sh "${MVN} -B package -DskipTests"
+                sh 'mvn -B package -DskipTests'
             }
         }
 
